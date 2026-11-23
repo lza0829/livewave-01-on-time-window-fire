@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app.db import 夹具目录, 连接
-from app.services import 装载, 贯验, 目录
+from app.services import 装载, 贯验, 目录, 关窗发射 as 发射服务
 
 路由 = APIRouter(prefix="/api")
 
@@ -83,7 +83,31 @@ def 列热度窗(状态: str = ""):
             )
         else:
             rows = conn.execute("SELECT * FROM 热度窗 ORDER BY 窗起事件时 DESC")
-        return [dict(r) for r in rows]
+        out = []
+        for r in rows:
+            d = dict(r)
+            d["发射视图"] = 发射服务.组装发射视图(conn, r)
+            out.append(d)
+        return out
+    finally:
+        conn.close()
+
+
+@路由.get("/关窗发射")
+def 列关窗发射(状态: str = "", 窗键: str = ""):
+    """关窗发射只读接口：窗键、关闭态、发射快照/现行合计、拒收/续写证据、valid。
+
+    - 不带参：全窗列表；带 状态：按关闭态过滤；带 窗键：返回单窗视图（窗键含竖线/时间冒号，
+      用查询参数避免路径编码问题），窗键不存在返回 404。
+    """
+    conn = 连接()
+    try:
+        if 窗键:
+            视图 = 发射服务.取单窗(conn, 窗键)
+            if 视图 is None:
+                raise HTTPException(404, f"窗不存在:{窗键}")
+            return 视图
+        return 发射服务.列发射视图(conn, 状态)
     finally:
         conn.close()
 

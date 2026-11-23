@@ -30,6 +30,7 @@ export default function 窗互证页() {
             <div className="卡"><b>{果.事件数}</b><span>事件</span></div>
             <div className="卡"><b>{果.已关闭窗数}</b><span>已关窗</span></div>
             <div className="卡"><b>{果.撤回数}</b><span>撤回</span></div>
+            <div className="卡"><b>{果.关闭拒收数 ?? 0}</b><span>关闭拒收</span></div>
             <div className="卡"><b>{果.旁路数}</b><span>旁路</span></div>
           </div>
         </div>

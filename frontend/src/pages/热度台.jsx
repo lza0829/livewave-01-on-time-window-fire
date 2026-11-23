@@ -19,6 +19,7 @@ export default function 热度台() {
         <div className="阶"><div className="序">① 事件流</div><b>{数.互动事件 ?? 0}</b><span>已见事件</span></div>
         <div className="阶"><div className="序">② 水位 / 开窗</div><b>{数.开启窗 ?? 0}</b><span>开启中窗</span></div>
         <div className="阶"><div className="序">③ 已关窗</div><b>{数.已关闭窗 ?? 0}</b><span>已发射</span></div>
+        <div className="阶"><div className="序">关闭拒收</div><b>{数.关闭拒收 ?? 0}</b><span>冻结拒收</span></div>
         <div className="阶"><div className="序">④ 撤回</div><b>{数.撤回单数 ?? 数.撤回单 ?? 0}</b><span>迟到修正</span></div>
         <div className="阶"><div className="序">⑤ 旁路</div><b>{数.旁路匣 ?? 0}</b><span>超允许迟到</span></div>
       </div>

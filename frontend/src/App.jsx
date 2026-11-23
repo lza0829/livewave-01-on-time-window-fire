@@ -4,6 +4,7 @@ import 热度台 from "./pages/热度台.jsx";
 import 事件流 from "./pages/事件流.jsx";
 import 水位线 from "./pages/水位线.jsx";
 import 热度窗 from "./pages/热度窗.jsx";
+import 关窗发射 from "./pages/关窗发射.jsx";
 import 撤回单 from "./pages/撤回单.jsx";
 import 旁路匣 from "./pages/旁路匣.jsx";
 import 窗互证 from "./pages/窗互证.jsx";
@@ -14,6 +15,7 @@ const 主链 = [
   ["/事件流", "① 事件流"],
   ["/水位线", "② 水位线"],
   ["/热度窗", "③ 热度窗"],
+  ["/关窗发射", "关窗发射"],
   ["/撤回单", "④ 撤回单"],
   ["/旁路匣", "⑤ 旁路匣"],
   ["/窗互证", "窗互证"],
@@ -47,6 +49,7 @@ export default function App() {
           <Route path="/事件流" element={<事件流 />} />
           <Route path="/水位线" element={<水位线 />} />
           <Route path="/热度窗" element={<热度窗 />} />
+          <Route path="/关窗发射" element={<关窗发射 />} />
           <Route path="/撤回单" element={<撤回单 />} />
           <Route path="/旁路匣" element={<旁路匣 />} />
           <Route path="/窗互证" element={<窗互证 />} />

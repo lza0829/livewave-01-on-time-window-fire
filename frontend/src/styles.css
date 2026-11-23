@@ -40,7 +40,7 @@ body { margin: 0; background: var(--底); color: var(--字) }
 .题 { font-size: 1.28rem; margin: 0 0 0.3rem }
 .述 { color: var(--淡); margin: 0 0 1.1rem; font-size: 0.9rem; line-height: 1.55; max-width: 52rem }
 .阶条 {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.45rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.45rem;
   margin-bottom: 1.2rem;
 }
 .阶 {

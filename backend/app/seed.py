@@ -78,6 +78,29 @@ CREATE TABLE IF NOT EXISTS 窗贯验 (
   是否通过 INTEGER NOT NULL,
   说明 TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS 关窗发射 (
+  窗键 TEXT PRIMARY KEY REFERENCES 热度窗(窗键),
+  房间键 TEXT NOT NULL,
+  发射号 INTEGER NOT NULL,
+  发射处理时 TEXT NOT NULL,
+  关闭时水位 TEXT NOT NULL,
+  快照点赞 INTEGER NOT NULL,
+  快照送礼 INTEGER NOT NULL,
+  快照笔数 INTEGER NOT NULL,
+  快照版本 INTEGER NOT NULL,
+  口径 TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS 关窗拒收 (
+  编号 INTEGER PRIMARY KEY AUTOINCREMENT,
+  窗键 TEXT NOT NULL,
+  房间键 TEXT NOT NULL,
+  事件编号 TEXT NOT NULL,
+  事件时 TEXT NOT NULL,
+  处理时 TEXT NOT NULL,
+  关闭处理时 TEXT NOT NULL,
+  原因 TEXT NOT NULL,
+  时刻 TEXT NOT NULL
+);
 """
 
 
@@ -88,6 +111,12 @@ def 此刻() -> str:
 def 初始化库() -> None:
     conn = 连接()
     conn.executescript(建表)
+    # 全局唯一口径：关闭即冻结。对已存在的库也幂等补齐（禁止并存「关闭可续写」）。
+    conn.execute(
+        "INSERT INTO 站规(键, 值) VALUES (?, ?) "
+        "ON CONFLICT(键) DO UPDATE SET 值=excluded.值",
+        ("关窗口径", "关闭即冻结"),
+    )
     if conn.execute("SELECT COUNT(*) AS c FROM 站规").fetchone()["c"] == 0:
         for k, v in {
             "站名": "播浪",
@@ -96,9 +125,20 @@ def 初始化库() -> None:
             "水位推进策略": "事件时最大值",
             "关窗条件": "水位>=窗止即关闭发射",
             "旁路条件": "水位>=窗止+允许迟到",
+            "关窗后准时事件": "拒收（关闭即冻结；仅显式迟到修正可改现行合计）",
             "骨架": "互动事件入流→事件时间水位线推进→热度窗关闭发射→迟到修正撤回→窗输出与撤回互证",
         }.items():
             conn.execute("INSERT INTO 站规(键, 值) VALUES (?, ?)", (k, v))
+    else:
+        for k, v in {
+            "关窗条件": "水位>=窗止即关闭发射",
+            "关窗后准时事件": "拒收（关闭即冻结；仅显式迟到修正可改现行合计）",
+        }.items():
+            conn.execute(
+                "INSERT INTO 站规(键, 值) VALUES (?, ?) "
+                "ON CONFLICT(键) DO NOTHING",
+                (k, v),
+            )
     if conn.execute("SELECT COUNT(*) AS c FROM 直播间").fetchone()["c"] == 0:
         conn.execute(
             "INSERT INTO 直播间(房间键, 标题, 主播, 开播事件时, 状态) VALUES (?,?,?,?,?)",

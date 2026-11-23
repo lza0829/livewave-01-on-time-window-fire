@@ -9,7 +9,9 @@ export default function 撤回单页() {
     <div>
       <h1 className="题">④ 撤回单</h1>
       <p className="述">
-        已关闭窗在「窗止 + 允许迟到」之前又进来事件时：先改窗合计，再记一笔撤回（旧值 → 新值）。这是窗计算的修正链，不是装载回滚。
+        关闭即冻结口径下，已关闭窗只接受<strong>显式迟到修正</strong>（处理时晚于关闭处理时、且未越窗止+允许迟到）：
+        改现行合计并记一笔撤回（旧值 → 新值），发射快照仍冻结。关窗前已在途的同窗<strong>准时</strong>事件不在此列——
+        它们被拒收，见「关窗发射」页的拒收证据。
       </p>
       <div className="行"><button className="次" onClick={刷}>刷新撤回</button></div>
       {!行.length ? (

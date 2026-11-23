@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { 取, 递 } from "../api.js";
 
-const 夹具 = ["准时热度样例", "迟到修正样例", "超迟到旁路样例"];
+const 夹具 = ["准时热度样例", "关窗准时拒收样例", "迟到修正样例", "超迟到旁路样例"];
 
 export default function 事件流() {
   const [事, 设事] = useState([]);
@@ -20,7 +20,9 @@ export default function 事件流() {
       <p className="述">
         推入带「事件时 / 处理时」的互动点。每次推送会抬水位、尝试关窗，并可能写出撤回或旁路——不是「入湖落三件套」。
       </p>
-      <div className="提示条">建议顺序：准时（关第一窗）→ 迟到修正（出撤回单）→ 超迟到（旁路匣）。</div>
+      <div className="提示条">
+        建议顺序：准时（关第一窗）→ 关窗准时拒收（关窗后同窗准时事件被拒收，合计不变）→ 迟到修正（出撤回单）→ 超迟到（旁路匣）。
+      </div>
       <div className="行">
         {夹具.map((n) => (
           <button key={n} className={`次 ${选 === n ? "亮片" : ""}`} onClick={() => 设选(n)}>{n}</button>
@@ -30,7 +32,7 @@ export default function 事件流() {
       </div>
       {报 && (
         <div className="报箱 码">
-          {`入窗 ${报.入窗} · 撤回 ${报.撤回} · 旁路 ${报.旁路} · 新关窗 ${报.新关窗}\n`}
+          {`入窗 ${报.入窗} · 撤回 ${报.撤回} · 旁路 ${报.旁路} · 关闭拒收 ${报.关闭拒收 ?? 0} · 新关窗 ${报.新关窗}\n`}
           {JSON.stringify(报.明细, null, 2)}
         </div>
       )}
